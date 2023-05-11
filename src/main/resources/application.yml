@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: todo-app
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:todo-db
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
