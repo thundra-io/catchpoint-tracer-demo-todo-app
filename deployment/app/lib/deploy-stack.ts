@@ -36,7 +36,7 @@ export class DeployStack extends cdk.Stack {
       {
         namespace: 'aws:autoscaling:launchconfiguration',
         optionName: 'InstanceType',
-        value: 't2.micro',
+        value: 't3.micro',
       },
     ];
 
