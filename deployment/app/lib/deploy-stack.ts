@@ -1,15 +1,28 @@
 import * as cdk from 'aws-cdk-lib';
 import * as elasticbeanstalk from 'aws-cdk-lib/aws-elasticbeanstalk';
 import * as s3assets from 'aws-cdk-lib/aws-s3-assets';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 
 import * as path from 'path';
 
-const APP_NAME = 'catchpoint-tracer-demo-todo-app';
+const APP_NAME = 'cp-tracer-demo-todo-app';
 
 export class DeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
+    const role = new iam.Role(this, `${APP_NAME}-role`, {
+      assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
+    });
+
+    const managedPolicy = iam.ManagedPolicy.fromAwsManagedPolicyName('AWSElasticBeanstalkWebTier');
+    role.addManagedPolicy(managedPolicy);
+
+    const instanceProfile = new iam.CfnInstanceProfile(this, `${APP_NAME}-instance-profile`, {
+      roles: [role.roleName],
+      instanceProfileName: `${APP_NAME}-instance-profile`,
+    });
 
     const application = new elasticbeanstalk.CfnApplication(this, APP_NAME, {
       applicationName: APP_NAME,
@@ -31,7 +44,7 @@ export class DeployStack extends cdk.Stack {
       {
         namespace: 'aws:autoscaling:launchconfiguration',
         optionName: 'IamInstanceProfile',
-        value: 'aws-elasticbeanstalk-ec2-role',
+        value: instanceProfile.instanceProfileName || `${APP_NAME}-instance-profile`,
       },
       {
         namespace: 'aws:autoscaling:launchconfiguration',
@@ -43,7 +56,7 @@ export class DeployStack extends cdk.Stack {
     const environment = new elasticbeanstalk.CfnEnvironment(this, `${APP_NAME}-env`, {
       environmentName: `${APP_NAME}-env`,
       applicationName: application.applicationName || APP_NAME,
-      solutionStackName: '64bit Amazon Linux 2 v5.4.5 running Corretto 11',
+      solutionStackName: '64bit Amazon Linux 2 v3.4.7 running Corretto 8',
       optionSettings: options,
       versionLabel: version.ref,
     });
