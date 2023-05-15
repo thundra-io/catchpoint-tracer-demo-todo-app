@@ -29,13 +29,13 @@ export class DeployStack extends cdk.Stack {
       applicationName: `${APP_NAME}-${PROFILE}`,
     });
 
-    const appZip = new s3assets.Asset(this, `${APP_NAME}-${PROFILE}-zipped`, {
+    const appZip = new s3assets.Asset(this, `${APP_NAME}-artifact-${PROFILE}`, {
       path: path.join(__dirname, '../../../target/todo-app.zip'),
     });
 
     const version = new elasticbeanstalk.CfnApplicationVersion(
       this,
-      `${APP_NAME}-${PROFILE}-version`,
+      `${APP_NAME}-version-${PROFILE}`,
       {
         applicationName: application.applicationName || `${APP_NAME}-${PROFILE}`,
         sourceBundle: {
@@ -63,8 +63,8 @@ export class DeployStack extends cdk.Stack {
       },
     ];
 
-    const environment = new elasticbeanstalk.CfnEnvironment(this, `${APP_NAME}-${PROFILE}-env`, {
-      environmentName: `${APP_NAME}-${PROFILE}-env`,
+    const environment = new elasticbeanstalk.CfnEnvironment(this, `${APP_NAME}-env-${PROFILE}`, {
+      environmentName: `${APP_NAME}-env-${PROFILE}`,
       applicationName: application.applicationName || `${APP_NAME}-${PROFILE}`,
       solutionStackName: '64bit Amazon Linux 2 v3.4.7 running Corretto 8',
       optionSettings: options,
@@ -75,7 +75,7 @@ export class DeployStack extends cdk.Stack {
     version.addDependency(application);
     environment.addDependency(version);
 
-    new cdk.CfnOutput(this, `${APP_NAME}-${PROFILE}-url`, {
+    new cdk.CfnOutput(this, `${APP_NAME}-url-${PROFILE}`, {
       value: environment.attrEndpointUrl,
     });
   }
