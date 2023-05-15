@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "cp-tracing-demo-todo-app-deploy-app",
   "version": "0.1.0",
   "bin": {
     "app": "bin/app.js"

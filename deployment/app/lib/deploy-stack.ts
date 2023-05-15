@@ -6,7 +6,7 @@ import { Construct } from 'constructs';
 
 import * as path from 'path';
 
-const APP_NAME = 'cp-tracer-demo-todo-app';
+const APP_NAME = 'cp-tracing-demo-todo-app';
 
 export class DeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -51,6 +51,11 @@ export class DeployStack extends cdk.Stack {
         optionName: 'InstanceType',
         value: 't3.micro',
       },
+      {
+        namespace: 'aws:elasticbeanstalk:environment',
+        optionName: 'EnvironmentType',
+        value: 'SingleInstance',
+      },
     ];
 
     const environment = new elasticbeanstalk.CfnEnvironment(this, `${APP_NAME}-env`, {
@@ -59,6 +64,7 @@ export class DeployStack extends cdk.Stack {
       solutionStackName: '64bit Amazon Linux 2 v3.4.7 running Corretto 8',
       optionSettings: options,
       versionLabel: version.ref,
+      cnamePrefix: `${APP_NAME}`,
     });
 
     version.addDependency(application);
