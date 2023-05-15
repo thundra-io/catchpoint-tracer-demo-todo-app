@@ -6,7 +6,7 @@ import { Construct } from 'constructs';
 
 import * as path from 'path';
 
-const APP_NAME = 'cp-tracing-demo-todo-app';
+const APP_NAME = `cp-tracing-demo-todo-app-${process.env.PROFILE || 'lab'}`;
 
 export class DeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
