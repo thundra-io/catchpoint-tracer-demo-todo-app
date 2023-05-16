@@ -63,7 +63,7 @@ export class DeployStack extends cdk.Stack {
       },
     ];
 
-    const environment = new elasticbeanstalk.CfnEnvironment(this, `${APP_NAME}-${PROFILE}`, {
+    const environment = new elasticbeanstalk.CfnEnvironment(this, `${APP_NAME}-env-${PROFILE}`, {
       environmentName: `${APP_NAME}-${PROFILE}`,
       applicationName: application.applicationName || `${APP_NAME}-${PROFILE}`,
       solutionStackName: '64bit Amazon Linux 2 v3.4.7 running Corretto 8',
