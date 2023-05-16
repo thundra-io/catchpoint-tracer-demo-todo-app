@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class TodoServiceImpl implements TodoService {
-    private static long ONE_HOUR_AS_MILLIS =  60 * 60 * 1000;
+    private static final long ONE_HOUR_AS_MILLIS =  60 * 60 * 1000;
 
     private final TodoRepository repository;
 
