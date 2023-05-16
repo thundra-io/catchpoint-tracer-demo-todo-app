@@ -18,7 +18,7 @@ public class Scheduler {
         this.service = service;
     }
     
-    @Scheduled(fixedRate = FIVE_MINUTES)
+    @Scheduled(fixedRate = FIVE_MINUTES, initialDelay = FIVE_MINUTES)
     private void clearOldTodos() {
         service.clearOldTodos();
     }

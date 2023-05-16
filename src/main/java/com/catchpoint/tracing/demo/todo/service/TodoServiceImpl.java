@@ -6,6 +6,7 @@ import com.catchpoint.tracing.demo.todo.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
  * @author sozal
  */
 @Service
+@Transactional
 public class TodoServiceImpl implements TodoService {
     private static final long ONE_HOUR_AS_MILLIS =  60 * 60 * 1000;
 
@@ -71,8 +73,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public void clearOldTodos() {
-        List<TodoEntity> oldTodos = repository.findOldTodos(System.currentTimeMillis() - ONE_HOUR_AS_MILLIS);
-        repository.deleteAllInBatch(oldTodos);
+        repository.deleteOldQuery(System.currentTimeMillis() - ONE_HOUR_AS_MILLIS);
     }
 
     private TodoEntity getTodoEntity(Long id) {
