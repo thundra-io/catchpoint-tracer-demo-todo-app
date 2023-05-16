@@ -11,14 +11,16 @@ public class Todo {
     @NotNull(message = "Title cannot be null")
     private String title;
     private boolean completed;
+    private long createdAt;
 
     public Todo() {
     }
 
-    public Todo(Long id, String title, boolean completed) {
+    public Todo(Long id, String title, boolean completed, long createdAt) {
         this.id = id;
         this.title = title;
         this.completed = completed;
+        this.createdAt = createdAt != 0 ? createdAt : System.currentTimeMillis();
     }
 
     public Long getId() {
@@ -45,4 +47,11 @@ public class Todo {
         this.completed = completed;
     }
 
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
+    }
 }

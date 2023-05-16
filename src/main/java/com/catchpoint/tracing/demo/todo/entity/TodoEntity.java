@@ -18,14 +18,17 @@ public class TodoEntity {
     private Long id;
     private String title;
     private boolean completed;
+    private long createdAt;
 
     public TodoEntity() {
+        this.createdAt = System.currentTimeMillis();
     }
 
-    public TodoEntity(Long id, String title, boolean completed) {
+    public TodoEntity(Long id, String title, boolean completed, long createdAt) {
         this.id = id;
         this.title = title;
         this.completed = completed;
+        this.createdAt = createdAt != 0 ? createdAt : System.currentTimeMillis();
     }
 
     public Long getId() {
@@ -52,4 +55,11 @@ public class TodoEntity {
         this.completed = completed;
     }
 
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
+    }
 }

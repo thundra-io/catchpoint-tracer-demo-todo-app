@@ -6,6 +6,7 @@ import com.catchpoint.tracing.demo.todo.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,7 +14,9 @@ import java.util.stream.Collectors;
  * @author sozal
  */
 @Service
+@Transactional
 public class TodoServiceImpl implements TodoService {
+    private static final long ONE_HOUR_AS_MILLIS =  60 * 60 * 1000;
 
     private final TodoRepository repository;
 
@@ -25,7 +28,7 @@ public class TodoServiceImpl implements TodoService {
     public List<Todo> findTodos() {
         List<TodoEntity> entities = repository.findAll();
         return entities.stream()
-                .map(entity -> new Todo(entity.getId(), entity.getTitle(), entity.isCompleted()))
+                .map(entity -> new Todo(entity.getId(), entity.getTitle(), entity.isCompleted(), entity.getCreatedAt()))
                 .collect(Collectors.toList());
     }
 
@@ -35,7 +38,7 @@ public class TodoServiceImpl implements TodoService {
         entity.setTitle(request.getTitle());
         entity.setCompleted(request.isCompleted());
         entity = repository.save(entity);
-        return new Todo(entity.getId(), entity.getTitle(), entity.isCompleted());
+        return new Todo(entity.getId(), entity.getTitle(), entity.isCompleted(), entity.getCreatedAt());
     }
 
     @Override
@@ -44,7 +47,7 @@ public class TodoServiceImpl implements TodoService {
         entity.setTitle(request.getTitle());
         entity.setCompleted(request.isCompleted());
         entity = repository.save(entity);
-        return new Todo(entity.getId(), entity.getTitle(), entity.isCompleted());
+        return new Todo(entity.getId(), entity.getTitle(), entity.isCompleted(), entity.getCreatedAt());
     }
 
     @Override
@@ -59,13 +62,18 @@ public class TodoServiceImpl implements TodoService {
         entity.setTitle(duplicatedEntity.getTitle());
         entity.setCompleted(duplicatedEntity.isCompleted());
         entity = repository.save(entity);
-        return new Todo(entity.getId(), entity.getTitle(), entity.isCompleted());
+        return new Todo(entity.getId(), entity.getTitle(), entity.isCompleted(), entity.getCreatedAt());
     }
 
     @Override
     public void clearCompletedTodo() {
         List<TodoEntity> completedTodos = repository.findByCompletedIsTrue();
         repository.deleteAllInBatch(completedTodos);
+    }
+
+    @Override
+    public void clearOldTodos() {
+        repository.deleteOldTodos(System.currentTimeMillis() - ONE_HOUR_AS_MILLIS);
     }
 
     private TodoEntity getTodoEntity(Long id) {
