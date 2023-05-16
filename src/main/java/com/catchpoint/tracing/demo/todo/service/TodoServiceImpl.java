@@ -73,7 +73,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public void clearOldTodos() {
-        repository.deleteOldQuery(System.currentTimeMillis() - ONE_HOUR_AS_MILLIS);
+        repository.deleteOldTodos(System.currentTimeMillis() - ONE_HOUR_AS_MILLIS);
     }
 
     private TodoEntity getTodoEntity(Long id) {

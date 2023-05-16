@@ -16,6 +16,6 @@ public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
     
     @Modifying
     @Query("DELETE FROM TodoEntity t WHERE t.createdAt <= ?1")
-    void deleteOldQuery(long timestamp);
+    void deleteOldTodos(long timestamp);
 
 }
