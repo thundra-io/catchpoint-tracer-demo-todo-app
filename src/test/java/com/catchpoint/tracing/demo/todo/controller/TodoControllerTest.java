@@ -47,8 +47,9 @@ class TodoControllerTest {
 
     @Test
     void testFindTodos() throws Exception {
-        List<Todo> expected = Arrays.asList(new Todo(1L, "Test-1", true),
-                new Todo(2L, "Test-2", false), new Todo(3L, "Test-3", true));
+        List<Todo> expected = Arrays.asList(new Todo(1L, "Test-1", true,100000000L),
+                new Todo(2L, "Test-2", false, 100000000L), 
+                new Todo(3L, "Test-3", true, 100000000L));
         when(service.findTodos()).thenReturn(expected);
         MvcResult response = mockMvc.perform(get("/todos/list")
                 .contentType(MediaType.APPLICATION_JSON))

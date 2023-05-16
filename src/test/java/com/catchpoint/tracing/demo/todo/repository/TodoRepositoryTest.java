@@ -31,8 +31,8 @@ class TodoRepositoryTest {
     @Test
     void testFindByCompletedIsTrue() {
         List<TodoEntity> actual = repository.findByCompletedIsTrue();
-        assertThat(actual).extracting(TodoEntity::getId, TodoEntity::getTitle, TodoEntity::isCompleted)
-                .containsExactly(tuple(1L, "Test-1", true), tuple(3L, "Test-3", true))
+        assertThat(actual).extracting(TodoEntity::getId, TodoEntity::getTitle, TodoEntity::isCompleted, TodoEntity::getCreatedAt)
+                .containsExactly(tuple(1L, "Test-1", true, 100000000L), tuple(3L, "Test-3", true, 100000000L))
                 .hasSize(2);
     }
 

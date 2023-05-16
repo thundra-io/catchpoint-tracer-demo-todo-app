@@ -35,8 +35,9 @@ class TodoServiceTest {
 
     @Test
     void testFindTodos() {
-        List<TodoEntity> expected = Arrays.asList(new TodoEntity(1L, "Test-1", true),
-                new TodoEntity(2L, "Test-2", false), new TodoEntity(3L, "Test-3", true));
+        List<TodoEntity> expected = Arrays.asList(new TodoEntity(1L, "Test-1", true, 100000000L),
+                new TodoEntity(2L, "Test-2", false, 100000000L), 
+                new TodoEntity(3L, "Test-3", true, 100000000L));
         when(repository.findAll()).thenReturn(expected);
         List<Todo> actual = service.findTodos();
         assertThat(actual).usingRecursiveComparison()
@@ -70,7 +71,7 @@ class TodoServiceTest {
     void testUpdateTodo() {
         Todo expected = new Todo();
         expected.setTitle("Test-1");
-        TodoEntity entity = new TodoEntity(1L, "Test", true);
+        TodoEntity entity = new TodoEntity(1L, "Test", true, 100000000L);
         when(repository.findById(anyLong())).thenReturn(Optional.of(entity));
         when(repository.save(any(TodoEntity.class))).thenAnswer((Answer<TodoEntity>) invocationOnMock -> invocationOnMock.getArgument(0, TodoEntity.class));
         Todo actual = service.updateTodo(1L, expected);
@@ -86,7 +87,7 @@ class TodoServiceTest {
 
     @Test
     void testDuplicateTodo() {
-        TodoEntity expected = new TodoEntity(1L, "Test", true);
+        TodoEntity expected = new TodoEntity(1L, "Test", true, 100000000L);
         when(repository.findById(anyLong())).thenReturn(Optional.of(expected));
         when(repository.save(any(TodoEntity.class))).thenAnswer((Answer<TodoEntity>) invocationOnMock -> {
             TodoEntity entity = invocationOnMock.getArgument(0, TodoEntity.class);
