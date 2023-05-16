@@ -71,9 +71,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public void clearOldTodos() {
-        List<TodoEntity> oldTodos = repository.findAll().stream()
-                        .filter(todo -> todo.getCreatedAt() <= (System.currentTimeMillis() - ONE_HOUR_AS_MILLIS))
-                        .collect(Collectors.toList());
+        List<TodoEntity> oldTodos = repository.findOldTodos(System.currentTimeMillis() - ONE_HOUR_AS_MILLIS);
         repository.deleteAllInBatch(oldTodos);
     }
 
