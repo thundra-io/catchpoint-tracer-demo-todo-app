@@ -6,4 +6,3 @@ thundra:
     report:
       rest:
         baseurl: https://collector-lab.tracing.catchpoint.net/v1/
-        trustallcertificates: true
