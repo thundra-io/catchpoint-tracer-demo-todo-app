@@ -15,5 +15,9 @@ spring:
   schedule:
     enabled: true
 
+
+chaos:
+  enabled: true
+
 server:
   port: 5000

@@ -1,5 +1,6 @@
 package com.catchpoint.tracing.demo.todo.controller;
 
+import com.catchpoint.tracing.demo.todo.config.ChaosConfiguration;
 import com.catchpoint.tracing.demo.todo.service.TodoService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,9 +42,12 @@ class TodoControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
+                                                  
     @MockBean
     private TodoService service;
+    
+    @MockBean
+    private ChaosConfiguration chaosConfiguration;
 
     @Test
     void testFindTodos() throws Exception {

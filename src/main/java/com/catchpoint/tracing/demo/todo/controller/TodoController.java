@@ -1,5 +1,6 @@
 package com.catchpoint.tracing.demo.todo.controller;
 
+import com.catchpoint.tracing.demo.todo.config.ChaosConfiguration;
 import com.catchpoint.tracing.demo.todo.service.TodoService;
 import com.catchpoint.tracing.demo.todo.model.Todo;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
-
+    
+    private final ChaosConfiguration chaosConfiguration;
+    
     private final TodoService service;
-
-    public TodoController(TodoService service) {
+    public TodoController(TodoService service, ChaosConfiguration chaosConfiguration) {
         this.service = service;
-    }
+        this.chaosConfiguration = chaosConfiguration;
+    }                                                                                                      
 
     @GetMapping("/list")
     public ResponseEntity<List<Todo>> findTodos() {
@@ -35,7 +38,8 @@ public class TodoController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Todo> addTodo(@Valid @RequestBody Todo request) {
+    public ResponseEntity<Todo> addTodo(@Valid @RequestBody Todo request) throws Exception {
+        chaosConfiguration.throwRandomException();
         Todo todo = service.addTodo(request);
         return ResponseEntity.ok(todo);
     }
