@@ -1,7 +1,7 @@
 spring:
   application:
     name: todo-app
-    is-prod: true
+    random-exception: true
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:todo-db

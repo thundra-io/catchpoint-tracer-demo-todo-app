@@ -1,6 +1,6 @@
 spring:
   application:
-    is-prod: false
+    random-exception: false
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
