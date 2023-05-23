@@ -23,19 +23,17 @@ import java.util.Random;
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
+    
+    private static final short RANDOM_EXCEPTION_RATIO = 10;
+        
+    private final Random random = new Random();
+    private final TodoService service;
+    
     @Value("${spring.application.random-exception-enabled:false}")
     private boolean isRandomException;
-    
-    private static final short RANDOM_EXCEPTION_BASE = 10;
-    private static final short RANDOM_EXCEPTION_TRIGGER = 3;   
-    
-    private final Random random;
-    
-    private final TodoService service;
 
     public TodoController(TodoService service) {
         this.service = service;
-        this.random = new Random();
     }
 
     @GetMapping("/list")
@@ -46,10 +44,9 @@ public class TodoController {
 
     @PostMapping("/add")
     public ResponseEntity<Todo> addTodo(@Valid @RequestBody Todo request) throws Exception {
-        if (isRandomException && (random.nextInt(RANDOM_EXCEPTION_BASE) == RANDOM_EXCEPTION_TRIGGER)) {
-            throw new Exception("Random exception thrown");
+        if (isRandomException && (random.nextInt(RANDOM_EXCEPTION_RATIO) == 0)) {
+            throw new Exception("Service is down!");
         }
-        
         
         Todo todo = service.addTodo(request);
         return ResponseEntity.ok(todo);
