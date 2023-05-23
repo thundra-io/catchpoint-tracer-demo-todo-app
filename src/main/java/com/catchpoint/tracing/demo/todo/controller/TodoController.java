@@ -1,5 +1,6 @@
 package com.catchpoint.tracing.demo.todo.controller;
 
+import com.catchpoint.tracing.demo.todo.config.RandomExceptionConfiguration;
 import com.catchpoint.tracing.demo.todo.service.TodoService;
 import com.catchpoint.tracing.demo.todo.model.Todo;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,17 +25,13 @@ import java.util.Random;
 @RequestMapping("/todos")
 public class TodoController {
     
-    private static final short RANDOM_EXCEPTION_RATIO = 10;
-        
-    private final Random random = new Random();
-    private final TodoService service;
+    private final RandomExceptionConfiguration randomExceptionConfiguration;
     
-    @Value("${spring.application.random-exception-enabled:false}")
-    private boolean isRandomException;
-
-    public TodoController(TodoService service) {
+    private final TodoService service;
+    public TodoController(TodoService service, RandomExceptionConfiguration randomExceptionConfiguration) {
         this.service = service;
-    }
+        this.randomExceptionConfiguration = randomExceptionConfiguration;
+    }                                                                                                      
 
     @GetMapping("/list")
     public ResponseEntity<List<Todo>> findTodos() {
@@ -44,10 +41,7 @@ public class TodoController {
 
     @PostMapping("/add")
     public ResponseEntity<Todo> addTodo(@Valid @RequestBody Todo request) throws Exception {
-        if (isRandomException && (random.nextInt(RANDOM_EXCEPTION_RATIO) == 0)) {
-            throw new Exception("Service is down!");
-        }
-        
+        randomExceptionConfiguration.throwRandomException();
         Todo todo = service.addTodo(request);
         return ResponseEntity.ok(todo);
     }
