@@ -23,7 +23,7 @@ import java.util.Random;
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
-    @Value("${spring.application.random-exception:false}")
+    @Value("${spring.application.random-exception-enabled:false}")
     private boolean isRandomException;
     
     private static final short RANDOM_EXCEPTION_BASE = 10;
