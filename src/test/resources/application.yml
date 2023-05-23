@@ -1,6 +1,4 @@
 spring:
-  application:
-    chaos.enabled: false
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
@@ -8,4 +6,6 @@ spring:
     generate-ddl: true
     show-sql: true
   schedule:
-    enabled: false
+    enabled: false         
+chaos:
+  enabled: false

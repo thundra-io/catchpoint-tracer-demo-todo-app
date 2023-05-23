@@ -11,7 +11,7 @@ public class ChaosConfiguration {
 
     private static final short RANDOM_EXCEPTION_RATIO = 5;
 
-    @Value("${spring.application.chaos.enabled:false}")
+    @Value("${chaos.enabled:false}")
     private boolean isRandomException;
 
     private final Random random = new Random();
