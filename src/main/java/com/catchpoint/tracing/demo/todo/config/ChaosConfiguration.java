@@ -16,40 +16,39 @@ public class ChaosConfiguration {
 
     private final Random random = new Random();
     private static class ServerDownException extends Exception {
-        public ServerDownException() {
+        ServerDownException() {
             super("Server is down!");
         }
     }
     
     private static class DatabaseDownException extends Exception {
-        public DatabaseDownException() {
+        DatabaseDownException() {
             super("Database is down!");
         }
     }
     
     private static class NetworkUnreachableException extends Exception {
-        public NetworkUnreachableException() {
+        NetworkUnreachableException() {
             super("Network is unreachable!");
         }
     }
     
     private static class DiskFullException extends Exception {
-        public DiskFullException() {
+        DiskFullException() {
             super("Disk is full!");
         }
     }
     
     private static class OutOfMemoryException extends Exception {
-        public OutOfMemoryException() {
+        OutOfMemoryException() {
             super("Out of memory!");
         }
-    }                 
-    
+    }
+
+    @SuppressWarnings("magicnumber")
     public void throwRandomException() throws Exception {
         if (isRandomException && random.nextInt(RANDOM_EXCEPTION_RATIO) == 0) {
             switch (random.nextInt(RANDOM_EXCEPTION_RATIO)) {
-                case 0:
-                    throw new ServerDownException();
                 case 1:
                     throw new DatabaseDownException();
                 case 2:
@@ -58,6 +57,8 @@ public class ChaosConfiguration {
                     throw new DiskFullException();
                 case 4:
                     throw new OutOfMemoryException();
+                default:
+                    throw new ServerDownException();
             }
         }
     }
