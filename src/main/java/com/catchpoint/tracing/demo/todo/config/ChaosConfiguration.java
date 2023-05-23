@@ -7,11 +7,11 @@ import java.util.Random;
 
 
 @Configuration
-public class RandomExceptionConfiguration {
+public class ChaosConfiguration {
 
     private static final short RANDOM_EXCEPTION_RATIO = 5;
 
-    @Value("${spring.application.random-exception-enabled:false}")
+    @Value("${spring.application.chaos.enabled:false}")
     private boolean isRandomException;
 
     private final Random random = new Random();

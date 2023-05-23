@@ -1,9 +1,8 @@
 package com.catchpoint.tracing.demo.todo.controller;
 
-import com.catchpoint.tracing.demo.todo.config.RandomExceptionConfiguration;
+import com.catchpoint.tracing.demo.todo.config.ChaosConfiguration;
 import com.catchpoint.tracing.demo.todo.service.TodoService;
 import com.catchpoint.tracing.demo.todo.model.Todo;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author sozal
@@ -25,12 +23,12 @@ import java.util.Random;
 @RequestMapping("/todos")
 public class TodoController {
     
-    private final RandomExceptionConfiguration randomExceptionConfiguration;
+    private final ChaosConfiguration chaosConfiguration;
     
     private final TodoService service;
-    public TodoController(TodoService service, RandomExceptionConfiguration randomExceptionConfiguration) {
+    public TodoController(TodoService service, ChaosConfiguration chaosConfiguration) {
         this.service = service;
-        this.randomExceptionConfiguration = randomExceptionConfiguration;
+        this.chaosConfiguration = chaosConfiguration;
     }                                                                                                      
 
     @GetMapping("/list")
@@ -41,7 +39,7 @@ public class TodoController {
 
     @PostMapping("/add")
     public ResponseEntity<Todo> addTodo(@Valid @RequestBody Todo request) throws Exception {
-        randomExceptionConfiguration.throwRandomException();
+        chaosConfiguration.throwRandomException();
         Todo todo = service.addTodo(request);
         return ResponseEntity.ok(todo);
     }
