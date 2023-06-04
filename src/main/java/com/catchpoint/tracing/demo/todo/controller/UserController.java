@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final ChaosConfiguration chaosConfiguration;
-
     private final UserService service;
+    
     public UserController(UserService service, ChaosConfiguration chaosConfiguration) {
         this.service = service;
         this.chaosConfiguration = chaosConfiguration;
