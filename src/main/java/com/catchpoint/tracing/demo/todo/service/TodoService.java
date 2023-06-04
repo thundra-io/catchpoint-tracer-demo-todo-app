@@ -22,4 +22,5 @@ public interface TodoService {
     void clearCompletedTodo();
 
     void clearOldTodos();
+
 }

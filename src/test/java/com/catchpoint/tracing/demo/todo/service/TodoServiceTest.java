@@ -3,6 +3,7 @@ package com.catchpoint.tracing.demo.todo.service;
 import com.catchpoint.tracing.demo.todo.entity.TodoEntity;
 import com.catchpoint.tracing.demo.todo.model.Todo;
 import com.catchpoint.tracing.demo.todo.repository.TodoRepository;
+import com.catchpoint.tracing.demo.todo.service.impl.TodoServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

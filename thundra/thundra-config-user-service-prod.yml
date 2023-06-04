@@ -1,0 +1,8 @@
+thundra:
+  apikey: <PROD-API-KEY>
+  agent:
+    application:
+      name: user-service
+    report:
+      rest:
+        baseurl: https://collector.tracing.catchpoint.com/v1/

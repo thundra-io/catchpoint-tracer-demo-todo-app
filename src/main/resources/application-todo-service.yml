@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: todo-service
+  schedule:
+    enabled: true
+server:
+  port: 5000
+chaos:
+  enabled: true
+user:
+  check:
+    enabled: true

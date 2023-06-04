@@ -1,8 +1,9 @@
-package com.catchpoint.tracing.demo.todo.service;
+package com.catchpoint.tracing.demo.todo.service.impl;
 
 import com.catchpoint.tracing.demo.todo.entity.TodoEntity;
 import com.catchpoint.tracing.demo.todo.model.Todo;
 import com.catchpoint.tracing.demo.todo.repository.TodoRepository;
+import com.catchpoint.tracing.demo.todo.service.TodoService;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class TodoServiceImpl implements TodoService {
+
     private static final long ONE_HOUR_AS_MILLIS =  60 * 60 * 1000;
 
     private final TodoRepository repository;
