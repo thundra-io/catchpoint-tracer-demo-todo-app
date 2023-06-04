@@ -1,2 +1,2 @@
-todo_service: java -Xms256m -Xmx256m -javaagent:thundra-agent-bootstrap.jar -Dspring.profiles.active=todo-service -Dthundra.agent.property.profile=todo-service-lab -jar todo-app.jar
-user_service: java -Xms256m -Xmx256m -javaagent:thundra-agent-bootstrap.jar -Dspring.profiles.active=user-service -Dthundra.agent.property.profile=user-service-lab -jar todo-app.jar
+todo_service: java -Xms512m -Xmx512m -javaagent:thundra-agent-bootstrap.jar -Dspring.profiles.active=todo-service -Dthundra.agent.property.profile=todo-service-lab -jar todo-app.jar
+user_service: java -Xms512m -Xmx512m -javaagent:thundra-agent-bootstrap.jar -Dspring.profiles.active=user-service -Dthundra.agent.property.profile=user-service-lab -jar todo-app.jar
