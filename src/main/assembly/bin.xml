@@ -25,7 +25,8 @@
             <outputDirectory>/</outputDirectory>
             <includes>
                 <include>*.jar</include>
-                <include>thundra-config-${PROFILE}.yml</include>
+                <include>thundra-config-todo-service-${PROFILE}.yml</include>
+                <include>thundra-config-user-service-${PROFILE}.yml</include>
             </includes>
         </fileSet>
     </fileSets>

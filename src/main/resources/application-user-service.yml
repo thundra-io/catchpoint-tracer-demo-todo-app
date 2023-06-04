@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: user-service
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:file:user-db?mode=memory&cache=shared
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.sqlite.hibernate.dialect.SQLiteDialect
+chaos:
+  enabled: true
+server:
+  port: 8085

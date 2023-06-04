@@ -1,0 +1,9 @@
+thundra:
+  apikey: <STAGING-API-KEY>
+  agent:
+    application:
+      name: user-service
+      classname: Tornado
+    report:
+      rest:
+        baseurl: https://collector-staging.tracing.catchpoint.net/v1/

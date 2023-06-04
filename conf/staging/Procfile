@@ -1,1 +1,2 @@
-web: java -javaagent:thundra-agent-bootstrap.jar -Dthundra.agent.property.profile=staging -jar todo-app.jar
+todo_service: java -Xms512m -Xmx512m -javaagent:thundra-agent-bootstrap.jar -Dspring.profiles.active=todo-service -Dthundra.agent.property.profile=todo-service-staging -jar todo-app.jar
+user_service: java -Xms512m -Xmx512m -javaagent:thundra-agent-bootstrap.jar -Dspring.profiles.active=user-service -Dthundra.agent.property.profile=todo-service-staging -jar todo-app.jar

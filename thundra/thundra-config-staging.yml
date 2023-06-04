@@ -1,8 +1,0 @@
-thundra:
-  apikey: <STAGING-API-KEY>
-  agent:
-    application:
-      name: todo-service
-    report:
-      rest:
-        baseurl: https://collector-staging.tracing.catchpoint.net/v1/

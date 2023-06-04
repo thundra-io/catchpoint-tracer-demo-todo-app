@@ -1,8 +1,0 @@
-thundra:
-  apikey: ce01c09b-9dda-45e2-a08d-f61d0f60e985
-  agent:
-    application:
-      name: todo-service
-    report:
-      rest:
-        baseurl: https://collector-lab.tracing.catchpoint.net/v1/
