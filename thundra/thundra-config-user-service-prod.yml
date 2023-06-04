@@ -3,6 +3,7 @@ thundra:
   agent:
     application:
       name: user-service
+      classname: Tornado
     report:
       rest:
         baseurl: https://collector.tracing.catchpoint.com/v1/
