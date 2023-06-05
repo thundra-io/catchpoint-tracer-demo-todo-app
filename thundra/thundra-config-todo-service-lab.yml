@@ -6,3 +6,7 @@ thundra:
     report:
       rest:
         baseurl: https://collector-lab.tracing.catchpoint.net/v1/
+    trace:
+      instrument:
+        traceableconfig1: com.catchpoint.tracing.demo.todo.controller.*.*[traceLineByLine=true]
+        traceableconfig2: com.catchpoint.tracing.demo.todo.service.*.*[traceLineByLine=true]
