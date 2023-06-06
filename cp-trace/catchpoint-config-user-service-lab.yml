@@ -1,0 +1,12 @@
+catchpoint:
+  apikey: ce01c09b-9dda-45e2-a08d-f61d0f60e985
+  application:
+    name: user-service
+    classname: Tornado
+  report:
+    rest:
+       baseurl: https://collector-lab.tracing.catchpoint.net/v1/
+  trace:
+    instrument:
+      traceableconfig1: com.catchpoint.tracing.demo.todo.controller.*.*[traceLineByLine=true]
+      traceableconfig2: com.catchpoint.tracing.demo.todo.service.*.*[traceLineByLine=true]
