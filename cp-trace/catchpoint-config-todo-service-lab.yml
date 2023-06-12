@@ -1,10 +1,10 @@
 catchpoint:
-  apikey: ce01c09b-9dda-45e2-a08d-f61d0f60e985
+  apikey: a07edb98-37ac-4ba3-ba59-050681495361
   application:
     name: todo-service
   report:
     rest:
-      baseurl: https://collector-lab.tracing.catchpoint.net/v1/
+      baseurl: https://collector-staging.tracing.catchpoint.net/v1/
   trace:
     instrument:
       traceableconfig1: com.catchpoint.tracing.demo.todo.controller.*.*[traceLineByLine=true]
