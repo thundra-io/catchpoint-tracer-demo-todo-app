@@ -61,6 +61,11 @@ export class DeployStack extends cdk.Stack {
         optionName: 'EnvironmentType',
         value: 'SingleInstance',
       },
+      {
+        namespace: 'aws:elasticbeanstalk:cloudwatch:logs',
+        optionName: 'StreamLogs',
+        value: 'true',
+      }
     ];
 
     const environment = new elasticbeanstalk.CfnEnvironment(this, `${APP_NAME}-env-${PROFILE}`, {
