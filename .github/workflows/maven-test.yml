@@ -23,6 +23,8 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: Test Wiser Action
+        uses: thundra-io/cp-test-wiser-action@v0.0.1
       - name: Build with Maven
         run: |
           mvn clean install

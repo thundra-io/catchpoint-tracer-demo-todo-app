@@ -6,6 +6,8 @@ import com.catchpoint.tracing.demo.todo.repository.UserRepository;
 import com.catchpoint.tracing.demo.todo.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * @author sozal
  */
@@ -20,15 +22,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String email) {
-        UserEntity entity = getUserEntity(email);
-        if (entity == null) {
+        UserEntity userEntity = getUserEntity(email);
+        if (userEntity == null) {
             return null;
         }
-        return new User(entity.getEmail(), entity.getFirstName(), entity.getLastName(), entity.getCreatedAt());
+        return new User(userEntity.getEmail(), userEntity.getFirstName(),
+                userEntity.getLastName(), userEntity.getCreatedAt());
     }
 
     private UserEntity getUserEntity(String email) {
         return repository.findById(email).orElse(null);
+    }
+
+    @Override
+    public void deleteUserEntity(String email) {
+        Optional<UserEntity> entityOptional = repository.findById(email);
+        entityOptional.ifPresent(repository::delete);
     }
 
 }

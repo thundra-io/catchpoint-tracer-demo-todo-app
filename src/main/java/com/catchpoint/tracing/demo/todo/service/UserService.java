@@ -8,5 +8,6 @@ import com.catchpoint.tracing.demo.todo.model.User;
 public interface UserService {
 
     User getUser(String email);
-    
+
+    void deleteUserEntity(String email);
 }
