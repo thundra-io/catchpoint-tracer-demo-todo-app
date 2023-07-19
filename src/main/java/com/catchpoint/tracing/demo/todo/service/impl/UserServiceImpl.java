@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatedDeleteUserEntity(String email) {
+    public void updateDeleteUserEntity(String email) {
         Optional<UserEntity> entityOptional = repository.findById(email);
         entityOptional.ifPresent(repository::delete);
     }
