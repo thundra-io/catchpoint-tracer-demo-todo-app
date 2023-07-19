@@ -23,6 +23,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUser(String email) {
         UserEntity userEntity = getUserEntity(email);
+        if (userEntity == null) {
+            return null;
+        }
         return new User(userEntity.getEmail(), userEntity.getFirstName(),
                 userEntity.getLastName(), userEntity.getCreatedAt());
     }

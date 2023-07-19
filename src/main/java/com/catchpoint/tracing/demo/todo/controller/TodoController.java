@@ -61,9 +61,6 @@ public class TodoController {
             String userEmail = USER_EMAIL_LIST.get(RANDOM.nextInt(USER_EMAIL_LIST.size()));
             try {
                 User user = userClient.get("/users/get/" + userEmail, User.class);
-                if (user == null) {
-                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-                }
             } catch (HttpException e) {
                 if (e.getResponseCode() == HttpStatus.NOT_FOUND.value()) {
                     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
