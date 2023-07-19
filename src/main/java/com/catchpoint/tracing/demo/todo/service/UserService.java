@@ -9,5 +9,5 @@ public interface UserService {
 
     User getUser(String email);
 
-    void deleteUserEntity(String email);
+    void updatedDeleteUserEntity(String email);
 }
