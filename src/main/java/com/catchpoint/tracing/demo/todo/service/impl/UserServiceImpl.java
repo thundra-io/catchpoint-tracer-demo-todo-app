@@ -22,9 +22,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String email) {
-        UserEntity userEntity = getUserEntity(email);
-        return new User(userEntity.getEmail(), userEntity.getFirstName(),
-                userEntity.getLastName(), userEntity.getCreatedAt());
+        UserEntity entity = getUserEntity(email);
+        return new User(entity.getEmail(), entity.getFirstName(),
+                entity.getLastName(), entity.getCreatedAt());
     }
 
     private UserEntity getUserEntity(String email) {
