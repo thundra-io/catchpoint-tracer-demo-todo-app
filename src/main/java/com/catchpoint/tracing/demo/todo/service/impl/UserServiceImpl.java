@@ -20,7 +20,6 @@ public class UserServiceImpl implements UserService {
         this.repository = repository;
     }
 
-
     @Override
     public User getUser(String email) {
         UserEntity entity = getUserEntity(email);
