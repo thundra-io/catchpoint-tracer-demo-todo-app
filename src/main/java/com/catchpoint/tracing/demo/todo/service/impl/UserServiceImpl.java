@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService {
         return repository.findById(email).orElse(null);
     }
 
+
     @Override
     public void deleteUserEntity(String email) {
         Optional<UserEntity> entityOptional = repository.findById(email);
