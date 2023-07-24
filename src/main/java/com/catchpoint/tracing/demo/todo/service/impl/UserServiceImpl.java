@@ -27,7 +27,6 @@ public class UserServiceImpl implements UserService {
                 entity.getLastName(), entity.getCreatedAt());
     }
 
-
     private UserEntity getUserEntity(String email) {
         return repository.findById(email).orElse(null);
     }
