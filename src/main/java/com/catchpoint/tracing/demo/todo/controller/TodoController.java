@@ -76,7 +76,7 @@ public class TodoController {
 
     @GetMapping("/list")
     public ResponseEntity<List<Todo>> findTodos() {
-        checkUserAccess();
+        // No user access check is required for listing todos
 
         List<Todo> todos = service.findTodos();
         return ResponseEntity.ok(todos);
