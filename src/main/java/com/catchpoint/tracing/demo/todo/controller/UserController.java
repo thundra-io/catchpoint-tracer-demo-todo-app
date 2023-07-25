@@ -26,6 +26,7 @@ public class UserController {
 
     @GetMapping("/get/{email}")
     public ResponseEntity<User> getUser(@PathVariable String email) {
+        System.out.println("Getting user with email " + email + " ...");
         User user = service.getUser(email);
         if (user == null) {
             return ResponseEntity.notFound().build();
