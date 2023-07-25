@@ -28,6 +28,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public List<Todo> findTodos() {
+        System.out.println();
         List<TodoEntity> entities = repository.findAll();
         return entities.stream()
                 .map(entity -> new Todo(entity.getId(), entity.getTitle(), entity.isCompleted(), entity.getCreatedAt()))
@@ -40,6 +41,7 @@ public class TodoServiceImpl implements TodoService {
         entity.setTitle(request.getTitle());
         entity.setCompleted(request.isCompleted());
         entity = repository.save(entity);
+        System.out.println();
         return new Todo(entity.getId(), entity.getTitle(), entity.isCompleted(), entity.getCreatedAt());
     }
 
@@ -49,11 +51,13 @@ public class TodoServiceImpl implements TodoService {
         entity.setTitle(request.getTitle());
         entity.setCompleted(request.isCompleted());
         entity = repository.save(entity);
+        System.out.println();
         return new Todo(entity.getId(), entity.getTitle(), entity.isCompleted(), entity.getCreatedAt());
     }
 
     @Override
     public void deleteTodo(Long id) {
+        System.out.println();
         repository.deleteById(id);
     }
 
