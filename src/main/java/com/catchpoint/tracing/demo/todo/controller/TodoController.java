@@ -1,11 +1,16 @@
 package com.catchpoint.tracing.demo.todo.controller;
 
+import com.catchpoint.trace.api.invocation.annotations.InvocationAPI;
 import com.catchpoint.tracing.demo.todo.client.UserClient;
 import com.catchpoint.tracing.demo.todo.config.ChaosConfiguration;
 import com.catchpoint.tracing.demo.todo.http.HttpException;
 import com.catchpoint.tracing.demo.todo.model.User;
 import com.catchpoint.tracing.demo.todo.service.TodoService;
 import com.catchpoint.tracing.demo.todo.model.Todo;
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +53,7 @@ public class TodoController {
     private final TodoService service;
     private final ChaosConfiguration chaosConfiguration;
     private final UserClient userClient;
+    private final Tracer tracer = GlobalTracer.get();
 
     public TodoController(TodoService service, ChaosConfiguration chaosConfiguration,
                           UserClient userClient, @Value("${user.check.enabled:false}") boolean userCheckEnabled) {
@@ -59,6 +65,9 @@ public class TodoController {
     private void checkUserAccess() {
         if (userClient != null) {
             String userEmail = USER_EMAIL_LIST.get(RANDOM.nextInt(USER_EMAIL_LIST.size()));
+            InvocationAPI.setTag("email", userEmail);
+            Span span = tracer.buildSpan("getUserByEmail").withTag("email", userEmail).start();
+            Scope scope = tracer.activateSpan(span);
             try {
                 User user = userClient.get("/users/get/" + userEmail, User.class);
                 if (user == null) {
@@ -70,6 +79,8 @@ public class TodoController {
                 } else {
                     throw new ResponseStatusException(HttpStatus.resolve(e.getResponseCode()));
                 }
+            } finally {
+                scope.close();
             }
         }
     }
