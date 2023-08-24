@@ -1,5 +1,5 @@
 catchpoint:
-  apikey: <PROD-API-KEY>
+  apikey: 6d74ff0d-ebb4-48a9-b0ff-4d1112d7b489
   application:
     name: todo-service
   report:
