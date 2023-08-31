@@ -78,7 +78,7 @@ public class TodoServiceImpl implements TodoService {
         repository.deleteOldTodos(System.currentTimeMillis() - ONE_HOUR_AS_MILLIS);
     }
 
-    private TodoEntity getTodoEntity(Long id) {
+    public TodoEntity getTodoEntity(Long id) {
         return repository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Todo not found for given id."));
     }

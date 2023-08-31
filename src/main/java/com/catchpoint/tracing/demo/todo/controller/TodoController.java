@@ -56,7 +56,7 @@ public class TodoController {
         this.userClient = userCheckEnabled ? userClient : null;
     }
 
-    private void checkUserAccess() {
+    public void checkUserAccess() {
         if (userClient != null) {
             String userEmail = USER_EMAIL_LIST.get(RANDOM.nextInt(USER_EMAIL_LIST.size()));
             try {
