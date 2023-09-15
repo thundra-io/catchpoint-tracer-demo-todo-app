@@ -37,6 +37,7 @@ import java.util.Random;
 @RequestMapping("/todos")
 public class TodoController {
 
+    private static final int TRANSACTION_TIMEOUT = 10;
     private static final List<String> USER_EMAIL_LIST = Arrays.asList(
             "cwhite@todo.app",
             "awoods@todo.app",
@@ -107,8 +108,7 @@ public class TodoController {
 
     @PostMapping("/add-with-outer-error")
     public ResponseEntity<Todo> addTodoWithOuterError(@Valid @RequestBody Todo request) {
-        Todo todo = service.addTodoWithOuterError(request);
-        return ResponseEntity.ok(todo);
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
     @PostMapping("/add-with-inner-error")
@@ -126,16 +126,12 @@ public class TodoController {
     }
     
     @PostMapping("/add-with-timeout")
-    @Transactional(timeout = 10)
+    @Transactional(timeout = TRANSACTION_TIMEOUT)
     public ResponseEntity<Todo> addTodoWithTimeout(@Valid @RequestBody Todo request) throws Exception {
         chaosConfiguration.sleepForTimeout();
-        
         Todo todo = service.addTodo(request);
         return ResponseEntity.ok(todo);
     }
-
-
-
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @Valid @RequestBody Todo request) {

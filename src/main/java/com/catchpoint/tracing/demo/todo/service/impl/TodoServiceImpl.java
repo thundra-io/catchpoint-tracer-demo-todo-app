@@ -42,12 +42,7 @@ public class TodoServiceImpl implements TodoService {
         entity = repository.save(entity);
         return new Todo(entity.getId(), entity.getTitle(), entity.isCompleted(), entity.getCreatedAt());
     }
-
-    @Override
-    public Todo addTodoWithOuterError(Todo todo) {
-        throw new RuntimeException("This error is thrown for testing purpose.");
-    }
-
+    
     @Override
     public Todo addTodoWithInnerError(Todo todo) {
         TodoEntity entity = new TodoEntity();

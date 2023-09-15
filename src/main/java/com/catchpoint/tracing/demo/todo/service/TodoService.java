@@ -12,7 +12,6 @@ public interface TodoService {
     List<Todo> findTodos();
 
     Todo addTodo(Todo todo);
-    Todo addTodoWithOuterError(Todo todo);
     Todo addTodoWithInnerError(Todo todo);
 
     Todo updateTodo(Long id, Todo todo);
