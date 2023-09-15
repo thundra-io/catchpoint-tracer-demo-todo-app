@@ -14,6 +14,7 @@ import io.opentracing.util.GlobalTracer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -102,6 +103,39 @@ public class TodoController {
         Todo todo = service.addTodo(request);
         return ResponseEntity.ok(todo);
     }
+
+
+    @PostMapping("/add-with-outer-error")
+    public ResponseEntity<Todo> addTodoWithOuterError(@Valid @RequestBody Todo request) {
+        Todo todo = service.addTodoWithOuterError(request);
+        return ResponseEntity.ok(todo);
+    }
+    
+    @PostMapping("/add-with-inner-error")
+    public ResponseEntity<Todo> addTodoWithInnerError(@Valid @RequestBody Todo request) {
+        Todo todo = service.addTodoWithInnerError(request);
+        return ResponseEntity.ok(todo);
+    }
+    
+    @PostMapping("/add-with-latency")
+    public ResponseEntity<Todo> addTodoWithLatency(@Valid @RequestBody Todo request) throws Exception {
+        chaosConfiguration.sleepForLatency();
+        
+        Todo todo = service.addTodo(request);
+        return ResponseEntity.ok(todo);
+    }
+    
+    @PostMapping("/add-with-timeout")
+    @Transactional(timeout = 10)
+    public ResponseEntity<Todo> addTodoWithTimeout(@Valid @RequestBody Todo request) throws Exception {
+        chaosConfiguration.sleepForTimeout();
+        
+        Todo todo = service.addTodo(request);
+        return ResponseEntity.ok(todo);
+    }
+
+
+
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @Valid @RequestBody Todo request) {

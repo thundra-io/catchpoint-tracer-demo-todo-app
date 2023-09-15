@@ -66,12 +66,40 @@ $().ready(() => {
                 });
             },
             addTodo(text) {
-                const action = $.ajax('/todos/add', {
+                
+                const select = $('option:selected').val();
+                let url = '';
+                
+                switch (select) {
+                    case '1':
+                        url = '/todos/add';
+                        break;
+                    case '2':
+                        url = '/todos/add-with-outer-error';
+                        break;
+                    case '3':
+                        url = '/todos/add-with-inner-error';
+                        break;
+                    case '4':
+                        url = '/todos/add-with-latency';
+                        break;
+                    case '5':
+                        url = '/todos/add-with-timeout';
+                        break;
+                    default:
+                        url = '/todos/add';
+                        break;
+                }
+                
+                const action = $.ajax(url, {
                     contentType: 'application/json',
                     method: 'POST',
                     data: JSON.stringify({"title": text}),
                     dataType: 'json'
-                });
+                }).done((data) => {
+                    data ? console.log(`got status: ${data.status}`) : null;
+                }).catch(console.log);
+                
                 this.reloadOnFinish(action);
             },
             updateTodo(todo) {

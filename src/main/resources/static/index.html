@@ -10,9 +10,27 @@
     <body>
         <div id="app">
             <section class="todoapp">
+                <select id="todo-add-type" data-selector="todo-add-type" class="todo-app-type">
+                    <option value="1" selected>
+                        Normal
+                    </option>
+                    <option value="2">
+                        With Outer Error
+                    </option>
+                    <option value="3">
+                        With Inner Error
+                    </option>
+                    <option value="4">
+                        With Latency
+                    </option>
+                    <option value="5">
+                        With Timeout
+                    </option>
+                </select>
                 <header class="header">
                     <h1>todos</h1>
-                    <input id="new-todo" class="new-todo" v-model="newTodoTitle" v-on:keypress="onAddTodoPressed" autofocus="" placeholder="What needs to be done?" data-selector="input-new-todo">
+                    <input id="new-todo" class="new-todo" v-model="newTodoTitle" v-on:keypress="onAddTodoPressed" autofocus="" placeholder="What needs to be done?" data-selector="input-new-todo" />
+                   
                 </header>
                 <section class="main">
                     <input class="toggle-all" type="checkbox" data-selector="checkbox-toggle-all" v-on:click="toggleAll()">

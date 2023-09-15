@@ -10,35 +10,37 @@ import java.util.Random;
 public class ChaosConfiguration {
 
     private static final short RANDOM_EXCEPTION_RATIO = 5;
+    private static final short TEN_SECONDS = 10 * 1000;
 
     @Value("${chaos.enabled:false}")
     private boolean isRandomException;
 
     private final Random random = new Random();
+
     private static class ServerDownException extends Exception {
         ServerDownException() {
             super("Server is down!");
         }
     }
-    
+
     private static class DatabaseDownException extends Exception {
         DatabaseDownException() {
             super("Database is down!");
         }
     }
-    
+
     private static class NetworkUnreachableException extends Exception {
         NetworkUnreachableException() {
             super("Network is unreachable!");
         }
     }
-    
+
     private static class DiskFullException extends Exception {
         DiskFullException() {
             super("Disk is full!");
         }
     }
-    
+
     private static class OutOfMemoryException extends Exception {
         OutOfMemoryException() {
             super("Out of memory!");
@@ -62,5 +64,22 @@ public class ChaosConfiguration {
             }
         }
     }
-    
+
+    public void sleepForLatency() {
+        try {
+            Thread.sleep(TEN_SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sleepForTimeout() {
+        try {
+            Thread.sleep(TEN_SECONDS * 2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
