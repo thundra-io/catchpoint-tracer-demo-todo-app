@@ -14,19 +14,13 @@ import io.opentracing.util.GlobalTracer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -36,6 +30,7 @@ import java.util.Random;
 @RequestMapping("/todos")
 public class TodoController {
 
+    private static final int TEN_SECONDS_AS_MILLIS = 10 * 1000;
     private static final List<String> USER_EMAIL_LIST = Arrays.asList(
             "cwhite@todo.app",
             "awoods@todo.app",
@@ -61,8 +56,25 @@ public class TodoController {
         this.chaosConfiguration = chaosConfiguration;
         this.userClient = userCheckEnabled ? userClient : null;
     }
+                                                                            
+    public void handleMap(Map<String, String> map) {
+        if (map.containsKey("x-chaos-inject-error") && map.get("x-chaos-inject-error").equals("true")) {
+            throw new RuntimeException("This error is thrown for testing purpose.");
+        }
 
-    private void checkUserAccess() {
+        if (map.containsKey("x-chaos-inject-latency") && map.get("x-chaos-inject-latency").equals("true")) {
+            try {
+                Thread.sleep(TEN_SECONDS_AS_MILLIS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public void checkUserAccess(Map<String, String> headers) {
+        handleMap(headers);
+
         if (userClient != null) {
             String userEmail = USER_EMAIL_LIST.get(RANDOM.nextInt(USER_EMAIL_LIST.size()));
             InvocationAPI.setTag("email", userEmail);
@@ -86,16 +98,17 @@ public class TodoController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<Todo>> findTodos() {
-        checkUserAccess();
+    public ResponseEntity<List<Todo>> findTodos(@RequestHeader Map<String, String> headers) {
+        checkUserAccess(headers);
 
         List<Todo> todos = service.findTodos();
         return ResponseEntity.ok(todos);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Todo> addTodo(@Valid @RequestBody Todo request) throws Exception {
-        checkUserAccess();
+    public ResponseEntity<Todo> addTodo(@Valid @RequestBody Todo request,
+                                        @RequestHeader Map<String, String> headers) throws Exception {
+        checkUserAccess(headers);
 
         chaosConfiguration.throwRandomException();
 
@@ -104,32 +117,33 @@ public class TodoController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @Valid @RequestBody Todo request) {
-        checkUserAccess();
+    public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @Valid @RequestBody Todo request,
+                                           @RequestHeader Map<String, String> headers) {
+        checkUserAccess(headers);
 
         Todo todo = service.updateTodo(id, request);
         return ResponseEntity.ok(todo);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
-        checkUserAccess();
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long id, @RequestHeader Map<String, String> headers) {
+        checkUserAccess(headers);
 
         service.deleteTodo(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/duplicate/{id}")
-    public ResponseEntity<Todo> duplicateTodo(@PathVariable Long id) {
-        checkUserAccess();
+    public ResponseEntity<Todo> duplicateTodo(@PathVariable Long id, @RequestHeader Map<String, String> headers) {
+        checkUserAccess(headers);
 
         Todo todo = service.duplicateTodo(id);
         return ResponseEntity.ok(todo);
     }
 
     @PostMapping("/clear-completed")
-    public ResponseEntity<Void> clearCompletedTodo() {
-        checkUserAccess();
+    public ResponseEntity<Void> clearCompletedTodo(@RequestHeader Map<String, String> headers) {
+        checkUserAccess(headers);
 
         service.clearCompletedTodo();
         return ResponseEntity.ok().build();
