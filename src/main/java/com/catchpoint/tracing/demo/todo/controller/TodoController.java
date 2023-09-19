@@ -60,16 +60,16 @@ public class TodoController {
     public void handleMap(Map<String, String> map) {
         if (map.containsKey("x-chaos-inject-error") && map.get("x-chaos-inject-error").equals("true")) {
             throw new RuntimeException("This error is thrown for testing purpose.");
-        }
-
-        if (map.containsKey("x-chaos-inject-latency") && map.get("x-chaos-inject-latency").equals("true")) {
+        } else if (map.containsKey("x-chaos-inject-latency") && map.get("x-chaos-inject-latency").equals("true")) {
+            chaosConfiguration.setEnabled(false);
             try {
                 Thread.sleep(TEN_SECONDS_AS_MILLIS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        } else {
+            chaosConfiguration.restore();
         }
-
     }
 
     public void checkUserAccess(Map<String, String> headers) {
