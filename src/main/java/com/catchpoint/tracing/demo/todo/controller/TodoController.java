@@ -7,8 +7,6 @@ import com.catchpoint.tracing.demo.todo.http.HttpException;
 import com.catchpoint.tracing.demo.todo.model.User;
 import com.catchpoint.tracing.demo.todo.service.TodoService;
 import com.catchpoint.tracing.demo.todo.model.Todo;
-import io.opentracing.Scope;
-import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 import org.springframework.beans.factory.annotation.Value;
