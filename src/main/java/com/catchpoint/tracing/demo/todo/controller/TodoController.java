@@ -75,11 +75,14 @@ public class TodoController {
     public void checkUserAccess(Map<String, String> headers) {
         handleMap(headers);
 
+        String userEmail = USER_EMAIL_LIST.get(RANDOM.nextInt(USER_EMAIL_LIST.size()));
+        if (headers.containsKey("x-chaos-inject-auth-error") &&
+                headers.get("x-chaos-inject-auth-error").equals("true")) {
+            userEmail = USER_EMAIL_LIST.get(USER_EMAIL_LIST.size() - 1);
+        }
+
         if (userClient != null) {
-            String userEmail = USER_EMAIL_LIST.get(RANDOM.nextInt(USER_EMAIL_LIST.size()));
             InvocationAPI.setTag("email", userEmail);
-            Span span = tracer.buildSpan("getUserByEmail").withTag("email", userEmail).start();
-            Scope scope = tracer.activateSpan(span);
             try {
                 User user = userClient.get("/users/get/" + userEmail, User.class);
                 if (user == null) {
@@ -91,8 +94,6 @@ public class TodoController {
                 } else {
                     throw new ResponseStatusException(HttpStatus.resolve(e.getResponseCode()));
                 }
-            } finally {
-                scope.close();
             }
         }
     }
