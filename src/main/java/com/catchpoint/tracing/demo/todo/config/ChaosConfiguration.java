@@ -11,10 +11,27 @@ public class ChaosConfiguration {
 
     private static final short RANDOM_EXCEPTION_RATIO = 5;
 
+
     @Value("${chaos.enabled:false}")
+    private boolean enabled;
+
     private boolean isRandomException;
 
     private final Random random = new Random();
+
+    public void setEnabled(boolean enabled) {
+        isRandomException = enabled;
+    }
+    
+    public void restore() {
+        isRandomException = enabled;
+    }
+    
+    public ChaosConfiguration() {
+        restore();
+    }
+    
+    
     private static class ServerDownException extends Exception {
         ServerDownException() {
             super("Server is down!");
