@@ -8,9 +8,7 @@ custom:
   notificationQueueArn: ${ssm:/cp-tracing/${env:STAGE}/demo/todo-app/notification.queue.arn.${env:PROFILE}}
 
 package:
-  include:
-    - ../target/**
-  artifact: ../target/todo-app.zip
+  artifact: ../target/todo-app.jar
 
 provider:
   name: aws
