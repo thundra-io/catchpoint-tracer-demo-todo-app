@@ -11,7 +11,7 @@ public class NotificationMessageHandler implements RequestHandler<SQSEvent, Void
 
     @Override
     public Void handleRequest(SQSEvent sqsEvent, Context context) {
-        context.getLogger().log("_X_AMZN_TRACE_ID: " + System.getenv("_X_AMZN_TRACE_ID"));
+        context.getLogger().log("Env vars: " + System.getenv());
         for (SQSEvent.SQSMessage message : sqsEvent.getRecords()) {
             context.getLogger().log("Handling notification message: " + message.getBody());
         }
