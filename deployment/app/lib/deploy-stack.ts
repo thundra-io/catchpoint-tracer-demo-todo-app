@@ -91,7 +91,7 @@ export class DeployStack extends cdk.Stack {
       },
       {
         namespace: 'aws:elasticbeanstalk:application:environment',
-        optionName: 'TODO-APP-NOTIFICATION_TOPIC_ARN',
+        optionName: 'TODO_APP_NOTIFICATION_TOPIC_ARN',
         value: notificationTopic.topicArn,
       },
     ];
