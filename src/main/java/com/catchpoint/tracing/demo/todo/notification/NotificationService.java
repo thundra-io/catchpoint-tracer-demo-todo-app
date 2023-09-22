@@ -3,8 +3,8 @@ package com.catchpoint.tracing.demo.todo.notification;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.services.sns.SnsClient;
-import software.amazon.awssdk.services.sns.model.PublishRequest;
+import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
 import java.io.IOException;
 
@@ -15,16 +15,16 @@ import java.io.IOException;
 public class NotificationService {
 
     @Autowired
-    private SnsClient snsClient;
+    private SqsClient sqsClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final String notificationTopicARN = System.getenv("TODO_APP_NOTIFICATION_TOPIC_ARN");
+    private final String notificationQueueURL = System.getenv("TODO_APP_NOTIFICATION_QUEUE_URL");
 
     public void sendNotification(NotificationEvent message) throws IOException {
         String messageStr = objectMapper.writeValueAsString(message);
-        snsClient.publish(PublishRequest
+        sqsClient.sendMessage(SendMessageRequest
                 .builder()
-                .topicArn(notificationTopicARN)
-                .message(messageStr)
+                .queueUrl(notificationQueueURL)
+                .messageBody(messageStr)
                 .build());
     }
 

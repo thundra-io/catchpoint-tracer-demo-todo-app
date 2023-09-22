@@ -1,7 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import * as elasticbeanstalk from 'aws-cdk-lib/aws-elasticbeanstalk';
 import * as s3assets from 'aws-cdk-lib/aws-s3-assets';
-import * as sns from 'aws-cdk-lib/aws-sns';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 
@@ -15,9 +15,8 @@ export class DeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const notificationTopic = new sns.Topic(this, `${APP_NAME}-notification-topic-${PROFILE}`, {
-      displayName: `${APP_NAME}-notification-topic-${PROFILE}`,
-      topicName: `${APP_NAME}-notification-topic-${PROFILE}`
+    const notificationQueue = new sqs.Queue(this, `${APP_NAME}-notification-queue-${PROFILE}`, {
+      queueName: `${APP_NAME}-notification-queue-${PROFILE}`,
     });
 
     const appPolicy = new iam.ManagedPolicy(this, `${APP_NAME}-policy-${PROFILE}`, {
@@ -26,10 +25,10 @@ export class DeployStack extends cdk.Stack {
         new iam.PolicyStatement({
           effect: iam.Effect.ALLOW,
           actions: [
-            'sns:*',
+            'sqs:*',
           ],
           resources: [
-            notificationTopic.topicArn,
+            notificationQueue.queueArn,
           ],
         }),
       ],
@@ -91,8 +90,8 @@ export class DeployStack extends cdk.Stack {
       },
       {
         namespace: 'aws:elasticbeanstalk:application:environment',
-        optionName: 'TODO_APP_NOTIFICATION_TOPIC_ARN',
-        value: notificationTopic.topicArn,
+        optionName: 'TODO_APP_NOTIFICATION_QUEUE_URL',
+        value: notificationQueue.queueUrl,
       },
     ];
 

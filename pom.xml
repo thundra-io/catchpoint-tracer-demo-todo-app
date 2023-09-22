@@ -47,7 +47,7 @@
         </dependency>
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
-            <artifactId>sns</artifactId>
+            <artifactId>sqs</artifactId>
             <version>${aws.sdk.version}</version>
         </dependency>
         <dependency>

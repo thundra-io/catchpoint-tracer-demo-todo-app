@@ -2,7 +2,7 @@ package com.catchpoint.tracing.demo.todo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import software.amazon.awssdk.services.sns.SnsClient;
+import software.amazon.awssdk.services.sqs.SqsClient;
 
 /**
  * @author sozal
@@ -11,8 +11,8 @@ import software.amazon.awssdk.services.sns.SnsClient;
 public class AWSSDKConfiguration {
 
     @Bean
-    public SnsClient snsClient() {
-        return SnsClient.
+    public SqsClient sqsClient() {
+        return SqsClient.
                 builder().
                 build();
     }
