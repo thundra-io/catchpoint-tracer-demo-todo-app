@@ -18,6 +18,8 @@ provider:
   memorySize: 1024
   timeout: 30
   deploymentBucket: ${self:custom.deploymentBucket}
+  tracing:
+    lambda: true
   environment:
     PROFILE: ${env:PROFILE}
 
