@@ -2,12 +2,15 @@ import * as cdk from 'aws-cdk-lib';
 import * as elasticbeanstalk from 'aws-cdk-lib/aws-elasticbeanstalk';
 import * as s3assets from 'aws-cdk-lib/aws-s3-assets';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as ssm from 'aws-cdk-lib/aws-ssm';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 
 import * as path from 'path';
 
 const APP_NAME = `cp-tracing-demo-todo-app`;
+const STAGE = process.env.STAGE || 'lab';
+const PROFILE = process.env.PROFILE || 'lab';
 const PROFILE = process.env.PROFILE || 'staging';
 
 export class DeployStack extends cdk.Stack {
@@ -17,6 +20,10 @@ export class DeployStack extends cdk.Stack {
 
     const notificationQueue = new sqs.Queue(this, `${APP_NAME}-notification-queue-${PROFILE}`, {
       queueName: `${APP_NAME}-notification-queue-${PROFILE}`,
+    });
+    new ssm.StringParameter(this, `${APP_NAME}-notification-queue-arn-ssm-${PROFILE}`, {
+      parameterName: `/cp-tracing/${STAGE}/demo/todo-app/notification.queue.arn.${PROFILE}`,
+      stringValue: notificationQueue.queueArn
     });
 
     const appPolicy = new iam.ManagedPolicy(this, `${APP_NAME}-policy-${PROFILE}`, {

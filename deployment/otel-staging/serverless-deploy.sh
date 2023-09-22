@@ -3,6 +3,6 @@ export PROFILE=otel-staging
 
 pushd ../
 
-./deploy.sh
+./serverless-deploy.sh
 
 popd

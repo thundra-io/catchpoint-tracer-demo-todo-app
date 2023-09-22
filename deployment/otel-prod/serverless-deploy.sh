@@ -3,6 +3,6 @@ export PROFILE=otel-prod
 
 pushd ../
 
-./deploy.sh
+./serverless-deploy.sh
 
 popd

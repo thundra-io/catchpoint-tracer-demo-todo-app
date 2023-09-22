@@ -1,0 +1,31 @@
+service: cp-tracing-demo-todo-app
+variablesResolutionMode: 20210326
+frameworkVersion: "3"
+
+custom:
+  region: us-west-2
+  deploymentBucket: cp-tracing-releases-${env:STAGE}
+  notificationQueueArn: ${ssm:/cp-tracing/${env:STAGE}/demo/todo-app/notification.queue.arn.${env:PROFILE}}
+
+package:
+  include:
+    - ../target/**
+  artifact: ../target/todo-app.zip
+
+provider:
+  name: aws
+  runtime: java17
+  stage: ${env:STAGE}
+  region: ${self:custom.region}
+  memorySize: 1024
+  timeout: 30
+  deploymentBucket: ${self:custom.deploymentBucket}
+  environment:
+    PROFILE: ${env:PROFILE}
+
+functions:
+  notification-handler:
+    name: ${self:service}-notification-handler-${env:PROFILE}
+    handler: com.catchpoint.tracing.demo.todo.lambda.NotificationMessageHandler
+    events:
+      - sqs: ${self:custom.notificationQueueArn}

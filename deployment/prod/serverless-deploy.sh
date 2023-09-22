@@ -3,6 +3,6 @@ export PROFILE=prod
 
 pushd ../
 
-./deploy.sh
+./serverless-deploy.sh
 
 popd
