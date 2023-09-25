@@ -1,0 +1,2 @@
+cpTracingOTELCollectorEndpoint: https://otel-collector-staging.tracing.catchpoint.net
+cpTracingAPIKey: <STAGING-API-KEY>
