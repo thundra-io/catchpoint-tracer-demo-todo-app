@@ -22,7 +22,7 @@
 
         <sqlite.dialect.version>0.1.4</sqlite.dialect.version>
         <opentracing.version>0.33.0</opentracing.version>
-        <catchpoint.tracing.sdk.version>0.0.9</catchpoint.tracing.sdk.version>
+        <catchpoint.tracing.sdk.version>0.0.13-SNAPSHOT</catchpoint.tracing.sdk.version>
         <testcontainers.version>1.16.2</testcontainers.version>
         <selenium.version>3.141.59</selenium.version>
     </properties>
