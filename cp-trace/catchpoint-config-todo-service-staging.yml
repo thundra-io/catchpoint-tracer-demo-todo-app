@@ -1,5 +1,5 @@
 catchpoint:
-  apikey: <STAGING-API-KEY>
+  apikey: ce01c09b-9dda-45e2-a08d-f61d0f60e985
   application:
     name: todo-service
   report:

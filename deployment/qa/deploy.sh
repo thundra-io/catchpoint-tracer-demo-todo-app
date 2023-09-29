@@ -1,4 +1,4 @@
-export PROFILE=otel-lab
+export PROFILE=qa
 
 pushd ../
 
