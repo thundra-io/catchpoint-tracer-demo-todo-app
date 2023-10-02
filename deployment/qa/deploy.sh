@@ -1,3 +1,4 @@
+export STAGE=qa
 export PROFILE=qa
 
 pushd ../
