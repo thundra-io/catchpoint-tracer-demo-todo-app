@@ -1,0 +1,2 @@
+cpTracingOTELCollectorEndpoint: https://otel-collector-qa.tracing.catchpoint.net
+cpTracingAPIKey: <QA-API-KEY>

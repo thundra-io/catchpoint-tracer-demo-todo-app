@@ -9,8 +9,7 @@ import { Construct } from 'constructs';
 import * as path from 'path';
 
 const APP_NAME = `cp-tracing-demo-todo-app`;
-const STAGE = process.env.STAGE || 'lab';
-const PROFILE = process.env.PROFILE || 'lab';
+const STAGE = process.env.STAGE || 'staging';
 const PROFILE = process.env.PROFILE || 'staging';
 
 export class DeployStack extends cdk.Stack {
