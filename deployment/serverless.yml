@@ -5,8 +5,9 @@ frameworkVersion: "3"
 custom:
   region: us-west-2
   deploymentBucket: cp-tracing-releases-${env:STAGE}
-  cpTracingAPIKey: ${file(./${env:PROFILE}/config.yml):cpTracingAPIKey}
-  cpTracingOTELCollectorEndpoint: ${file(./${env:PROFILE}/config.yml):cpTracingOTELCollectorEndpoint}
+  cpTracingAPIKey: ${file(./${env:PROFILE}/config.yml):cpTracingAPIKey, ''}
+  cpTracingOTELTracesExporter: ${file(./${env:PROFILE}/config.yml):cpTracingOTELTracesExporter, 'none'}
+  cpTracingOTLPEndpoint: ${file(./${env:PROFILE}/config.yml):cpTracingOTLPEndpoint, ''}
   notificationQueueArn: ${ssm:/cp-tracing/${env:STAGE}/demo/todo-app/notification.queue.arn.${env:PROFILE}}
 
 package:
@@ -22,10 +23,10 @@ provider:
   deploymentBucket: ${self:custom.deploymentBucket}
   environment:
     PROFILE: ${env:PROFILE}
-    OTEL_TRACES_EXPORTER: otlp
+    OTEL_TRACES_EXPORTER: ${self:custom.cpTracingOTELTracesExporter}
     OTEL_METRICS_EXPORTER: none
     OTEL_EXPORTER_OTLP_PROTOCOL: grpc
-    OTEL_EXPORTER_OTLP_ENDPOINT: ${self:custom.cpTracingOTELCollectorEndpoint}
+    OTEL_EXPORTER_OTLP_ENDPOINT: ${self:custom.cpTracingOTLPEndpoint}
     OTEL_EXPORTER_OTLP_HEADERS: x-catchpoint-api-key=${self:custom.cpTracingAPIKey}
 
 functions:
