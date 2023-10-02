@@ -20,6 +20,8 @@
 
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
+        <opentelemetry.version>1.30.1</opentelemetry.version>
+        <opentelemetry.alpha.version>1.30.0-alpha</opentelemetry.alpha.version>
         <aws.sdk.version>2.20.152</aws.sdk.version>
         <aws.lambda.core.version>1.2.3</aws.lambda.core.version>
         <aws.lambda.events.version>2.2.9</aws.lambda.events.version>
@@ -100,34 +102,34 @@
             <version>${catchpoint.tracing.sdk.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.opentelemetry.instrumentation</groupId>
-            <artifactId>opentelemetry-aws-lambda-core-1.0</artifactId>
-            <version>1.30.0-alpha</version>
-        </dependency>
-        <dependency>
-            <groupId>io.opentelemetry.instrumentation</groupId>
-            <artifactId>opentelemetry-aws-lambda-events-2.2</artifactId>
-            <version>1.30.0-alpha</version>
-        </dependency>
-        <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-sdk</artifactId>
-            <version>1.30.1</version>
+            <version>${opentelemetry.version}</version>
         </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
-            <version>1.30.1</version>
+            <version>${opentelemetry.version}</version>
         </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-otlp</artifactId>
-            <version>1.30.1</version>
+            <version>${opentelemetry.version}</version>
         </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-logging-otlp</artifactId>
-            <version>1.30.1</version>
+            <version>${opentelemetry.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-aws-lambda-core-1.0</artifactId>
+            <version>${opentelemetry.alpha.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-aws-lambda-events-2.2</artifactId>
+            <version>${opentelemetry.alpha.version}</version>
         </dependency>
 
         <dependency>
