@@ -31,7 +31,7 @@ provider:
 
 functions:
   notification-handler:
-    name: ${self:service}-notification-handler-${env:PROFILE}
+    name: cp-tracing-demo-todo-app-notification-handler-${env:PROFILE}
     handler: com.catchpoint.tracing.demo.todo.lambda.NotificationMessageHandler
     events:
       - sqs:
