@@ -1,4 +1,4 @@
-service: cp-tracing-demo-todo-app
+service: cp-tracing-demo-todo-app-serverless-${env:PROFILE}
 variablesResolutionMode: 20210326
 frameworkVersion: "3"
 
