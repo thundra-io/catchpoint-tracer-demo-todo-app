@@ -15,6 +15,7 @@ import com.catchpoint.tracing.demo.todo.service.TodoService;
 import com.catchpoint.tracing.demo.todo.model.Todo;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,9 +56,11 @@ public class TodoController {
     private final UserClient userClient;
     private final Tracer tracer = GlobalTracer.get();
 
-    public TodoController(TodoService service, NotificationService notificationService,
-                          ChaosConfiguration chaosConfiguration,
-                          UserClient userClient, @Value("${user.check.enabled:false}") boolean userCheckEnabled) {
+    public TodoController(@Autowired TodoService service,
+                          @Autowired(required = false) NotificationService notificationService,
+                          @Autowired ChaosConfiguration chaosConfiguration,
+                          @Autowired UserClient userClient,
+                          @Value("${user.check.enabled:false}") boolean userCheckEnabled) {
         this.service = service;
         this.notificationService = notificationService;
         this.chaosConfiguration = chaosConfiguration;
@@ -123,7 +126,9 @@ public class TodoController {
 
         Todo todo = service.addTodo(request);
 
-        notificationService.sendNotification(new TodoAddedNotification(todo));
+        if (notificationService != null) {
+            notificationService.sendNotification(new TodoAddedNotification(todo));
+        }
 
         return ResponseEntity.ok(todo);
     }
@@ -136,7 +141,9 @@ public class TodoController {
 
         Todo todo = service.updateTodo(id, request);
 
-        notificationService.sendNotification(new TodoUpdatedNotification(todo));
+        if (notificationService != null) {
+            notificationService.sendNotification(new TodoUpdatedNotification(todo));
+        }
 
         return ResponseEntity.ok(todo);
     }
@@ -148,7 +155,9 @@ public class TodoController {
 
         service.deleteTodo(id);
 
-        notificationService.sendNotification(new TodoDeletedNotification(id));
+        if (notificationService != null) {
+            notificationService.sendNotification(new TodoDeletedNotification(id));
+        }
 
         return ResponseEntity.noContent().build();
     }
@@ -160,7 +169,9 @@ public class TodoController {
 
         Todo todo = service.duplicateTodo(id);
 
-        notificationService.sendNotification(new TodoDuplicatedNotification(todo));
+        if (notificationService != null) {
+            notificationService.sendNotification(new TodoDuplicatedNotification(todo));
+        }
 
         return ResponseEntity.ok(todo);
     }
@@ -172,7 +183,9 @@ public class TodoController {
 
         service.clearCompletedTodo();
 
-        notificationService.sendNotification(new TodosClearedNotification());
+        if (notificationService != null) {
+            notificationService.sendNotification(new TodosClearedNotification());
+        }
 
         return ResponseEntity.ok().build();
     }

@@ -21,9 +21,11 @@ public class NotificationMessageHandler extends TracingRequestHandler<SQSEvent, 
     private static final String TRACE_STATE = "tracestate";
     private static final List<String> HEADER_NAMES =
             Collections.unmodifiableList(Arrays.asList(TRACE_PARENT, TRACE_STATE));
+    private static final int FLUSH_TIMEOUT_SECS = 3;
 
     public NotificationMessageHandler() {
-        super(AutoConfiguredOpenTelemetrySdk.initialize().getOpenTelemetrySdk(), Duration.ofSeconds(3));
+        super(AutoConfiguredOpenTelemetrySdk.initialize().getOpenTelemetrySdk(),
+                Duration.ofSeconds(FLUSH_TIMEOUT_SECS));
     }
 
     @Override
