@@ -21,6 +21,9 @@ provider:
   memorySize: 1024
   timeout: 30
   deploymentBucket: ${self:custom.deploymentBucket}
+  iam:
+    role:
+      name: cp-tracing-demo-todo-app-serverless-role-${env:PROFILE}
   environment:
     PROFILE: ${env:PROFILE}
     OTEL_TRACES_EXPORTER: ${self:custom.cpTracingOTELTracesExporter}
