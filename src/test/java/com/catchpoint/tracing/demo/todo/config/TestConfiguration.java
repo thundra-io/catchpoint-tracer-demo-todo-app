@@ -5,6 +5,7 @@ import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import software.amazon.awssdk.services.sqs.SqsClient;
 
 /**
  * @author sozal
@@ -16,6 +17,12 @@ public class TestConfiguration {
     @Primary
     public NotificationService notificationService() {
         return Mockito.mock(NotificationService.class);
+    }
+
+    @Bean
+    @Primary
+    public SqsClient sqsClient() {
+        return Mockito.mock(SqsClient.class);
     }
 
 }
