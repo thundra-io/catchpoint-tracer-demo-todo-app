@@ -5,10 +5,17 @@ import com.catchpoint.tracing.demo.todo.client.UserClient;
 import com.catchpoint.tracing.demo.todo.config.ChaosConfiguration;
 import com.catchpoint.tracing.demo.todo.http.HttpException;
 import com.catchpoint.tracing.demo.todo.model.User;
+import com.catchpoint.tracing.demo.todo.notification.NotificationService;
+import com.catchpoint.tracing.demo.todo.notification.TodoAddedNotification;
+import com.catchpoint.tracing.demo.todo.notification.TodoDeletedNotification;
+import com.catchpoint.tracing.demo.todo.notification.TodoDuplicatedNotification;
+import com.catchpoint.tracing.demo.todo.notification.TodoUpdatedNotification;
+import com.catchpoint.tracing.demo.todo.notification.TodosClearedNotification;
 import com.catchpoint.tracing.demo.todo.service.TodoService;
 import com.catchpoint.tracing.demo.todo.model.Todo;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,13 +51,18 @@ public class TodoController {
     private static final Random RANDOM = new Random();
 
     private final TodoService service;
+    private final NotificationService notificationService;
     private final ChaosConfiguration chaosConfiguration;
     private final UserClient userClient;
     private final Tracer tracer = GlobalTracer.get();
 
-    public TodoController(TodoService service, ChaosConfiguration chaosConfiguration,
-                          UserClient userClient, @Value("${user.check.enabled:false}") boolean userCheckEnabled) {
+    public TodoController(@Autowired TodoService service,
+                          @Autowired(required = false) NotificationService notificationService,
+                          @Autowired ChaosConfiguration chaosConfiguration,
+                          @Autowired UserClient userClient,
+                          @Value("${user.check.enabled:false}") boolean userCheckEnabled) {
         this.service = service;
+        this.notificationService = notificationService;
         this.chaosConfiguration = chaosConfiguration;
         this.userClient = userCheckEnabled ? userClient : null;
     }
@@ -106,45 +118,75 @@ public class TodoController {
 
     @PostMapping("/add")
     public ResponseEntity<Todo> addTodo(@Valid @RequestBody Todo request,
-                                        @RequestHeader Map<String, String> headers) throws Exception {
+                                        @RequestHeader Map<String, String> headers)
+            throws Exception {
         checkUserAccess(headers);
 
         chaosConfiguration.throwRandomException();
 
         Todo todo = service.addTodo(request);
+
+        if (notificationService != null) {
+            notificationService.sendNotification(new TodoAddedNotification(todo));
+        }
+
         return ResponseEntity.ok(todo);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @Valid @RequestBody Todo request,
-                                           @RequestHeader Map<String, String> headers) {
+                                           @RequestHeader Map<String, String> headers)
+            throws Exception {
         checkUserAccess(headers);
 
         Todo todo = service.updateTodo(id, request);
+
+        if (notificationService != null) {
+            notificationService.sendNotification(new TodoUpdatedNotification(todo));
+        }
+
         return ResponseEntity.ok(todo);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteTodo(@PathVariable Long id, @RequestHeader Map<String, String> headers) {
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long id, @RequestHeader Map<String, String> headers)
+            throws Exception {
         checkUserAccess(headers);
 
         service.deleteTodo(id);
+
+        if (notificationService != null) {
+            notificationService.sendNotification(new TodoDeletedNotification(id));
+        }
+
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/duplicate/{id}")
-    public ResponseEntity<Todo> duplicateTodo(@PathVariable Long id, @RequestHeader Map<String, String> headers) {
+    public ResponseEntity<Todo> duplicateTodo(@PathVariable Long id, @RequestHeader Map<String, String> headers)
+            throws Exception {
         checkUserAccess(headers);
 
         Todo todo = service.duplicateTodo(id);
+
+        if (notificationService != null) {
+            notificationService.sendNotification(new TodoDuplicatedNotification(todo));
+        }
+
         return ResponseEntity.ok(todo);
     }
 
     @PostMapping("/clear-completed")
-    public ResponseEntity<Void> clearCompletedTodo(@RequestHeader Map<String, String> headers) {
+    public ResponseEntity<Void> clearCompletedTodo(@RequestHeader Map<String, String> headers)
+            throws Exception {
         checkUserAccess(headers);
 
         service.clearCompletedTodo();
+
+        if (notificationService != null) {
+            notificationService.sendNotification(new TodosClearedNotification());
+        }
+
         return ResponseEntity.ok().build();
     }
 

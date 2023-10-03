@@ -1,3 +1,4 @@
+export STAGE=prod
 export PROFILE=prod
 
 pushd ../

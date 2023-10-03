@@ -1,0 +1,3 @@
+cpTracingOTELTracesExporter: otlp
+cpTracingOTLPEndpoint: https://otel-collector.tracing.catchpoint.com
+cpTracingAPIKey: <PROD-API-KEY>

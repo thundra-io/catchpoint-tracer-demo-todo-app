@@ -1,23 +1,51 @@
 import * as cdk from 'aws-cdk-lib';
 import * as elasticbeanstalk from 'aws-cdk-lib/aws-elasticbeanstalk';
 import * as s3assets from 'aws-cdk-lib/aws-s3-assets';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as ssm from 'aws-cdk-lib/aws-ssm';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 
 import * as path from 'path';
 
 const APP_NAME = `cp-tracing-demo-todo-app`;
+const STAGE = process.env.STAGE || 'staging';
 const PROFILE = process.env.PROFILE || 'staging';
 
 export class DeployStack extends cdk.Stack {
+
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
+    const notificationQueue = new sqs.Queue(this, `${APP_NAME}-notification-queue-${PROFILE}`, {
+      queueName: `${APP_NAME}-notification-queue-${PROFILE}`,
+    });
+    new ssm.StringParameter(this, `${APP_NAME}-notification-queue-arn-ssm-${PROFILE}`, {
+      parameterName: `/cp-tracing/${STAGE}/demo/todo-app/notification.queue.arn.${PROFILE}`,
+      stringValue: notificationQueue.queueArn
+    });
+
+    const appPolicy = new iam.ManagedPolicy(this, `${APP_NAME}-policy-${PROFILE}`, {
+      managedPolicyName: `${APP_NAME}-policy-${PROFILE}`,
+      statements: [
+        new iam.PolicyStatement({
+          effect: iam.Effect.ALLOW,
+          actions: [
+            'sqs:*',
+          ],
+          resources: [
+            notificationQueue.queueArn,
+          ],
+        }),
+      ],
+    });
+    const managedPolicy =
+        iam.ManagedPolicy.fromAwsManagedPolicyName('AWSElasticBeanstalkWebTier');
 
     const role = new iam.Role(this, `${APP_NAME}-role-${PROFILE}`, {
       assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
     });
-
-    const managedPolicy = iam.ManagedPolicy.fromAwsManagedPolicyName('AWSElasticBeanstalkWebTier');
+    role.addManagedPolicy(appPolicy);
     role.addManagedPolicy(managedPolicy);
 
     const instanceProfile = new iam.CfnInstanceProfile(this, `${APP_NAME}-instance-profile-${PROFILE}`, {
@@ -65,7 +93,12 @@ export class DeployStack extends cdk.Stack {
         namespace: 'aws:elasticbeanstalk:cloudwatch:logs',
         optionName: 'StreamLogs',
         value: 'true',
-      }
+      },
+      {
+        namespace: 'aws:elasticbeanstalk:application:environment',
+        optionName: 'TODO_APP_NOTIFICATION_QUEUE_URL',
+        value: notificationQueue.queueUrl,
+      },
     ];
 
     const environment = new elasticbeanstalk.CfnEnvironment(this, `${APP_NAME}-env-${PROFILE}`, {
@@ -83,5 +116,6 @@ export class DeployStack extends cdk.Stack {
     new cdk.CfnOutput(this, `${APP_NAME}-url-${PROFILE}`, {
       value: environment.attrEndpointUrl,
     });
+
   }
 }

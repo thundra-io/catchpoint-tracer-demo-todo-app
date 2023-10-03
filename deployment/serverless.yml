@@ -1,0 +1,42 @@
+service: cp-tracing-demo-todo-app-serverless-${env:PROFILE}
+variablesResolutionMode: 20210326
+frameworkVersion: "3"
+
+custom:
+  region: us-west-2
+  deploymentBucket: cp-tracing-releases-${env:STAGE}
+  cpTracingAPIKey: ${file(./${env:PROFILE}/config.yml):cpTracingAPIKey, ''}
+  cpTracingOTELTracesExporter: ${file(./${env:PROFILE}/config.yml):cpTracingOTELTracesExporter, 'none'}
+  cpTracingOTLPEndpoint: ${file(./${env:PROFILE}/config.yml):cpTracingOTLPEndpoint, ''}
+  notificationQueueArn: ${ssm:/cp-tracing/${env:STAGE}/demo/todo-app/notification.queue.arn.${env:PROFILE}}
+
+package:
+  artifact: ../target/todo-app.jar
+
+provider:
+  name: aws
+  runtime: java8
+  stage: ${env:STAGE}
+  region: ${self:custom.region}
+  memorySize: 1024
+  timeout: 30
+  deploymentBucket: ${self:custom.deploymentBucket}
+  iam:
+    role:
+      name: cp-tracing-demo-todo-app-serverless-role-${env:PROFILE}
+  environment:
+    PROFILE: ${env:PROFILE}
+    OTEL_TRACES_EXPORTER: ${self:custom.cpTracingOTELTracesExporter}
+    OTEL_METRICS_EXPORTER: none
+    OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+    OTEL_EXPORTER_OTLP_ENDPOINT: ${self:custom.cpTracingOTLPEndpoint}
+    OTEL_EXPORTER_OTLP_HEADERS: x-catchpoint-api-key=${self:custom.cpTracingAPIKey}
+
+functions:
+  notification-handler:
+    name: cp-tracing-demo-todo-app-notification-handler-${env:PROFILE}
+    handler: com.catchpoint.tracing.demo.todo.lambda.NotificationMessageHandler
+    events:
+      - sqs:
+          arn: ${self:custom.notificationQueueArn}
+          batchSize: 1
