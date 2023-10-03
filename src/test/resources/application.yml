@@ -22,3 +22,6 @@ user:
     protocol: http
     host: localhost
     port: 8085
+aws:
+  sdk:
+    enabled: false

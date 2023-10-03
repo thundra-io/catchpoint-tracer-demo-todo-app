@@ -1,15 +1,15 @@
 package com.catchpoint.tracing.demo.todo.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.services.sqs.SqsClient;
 
 /**
  * @author sozal
  */
-@Profile("!test")
 @Configuration
+@ConditionalOnProperty(value = "aws.sdk.enabled", havingValue = "true", matchIfMissing = true)
 public class AWSSDKConfiguration {
 
     @Bean
